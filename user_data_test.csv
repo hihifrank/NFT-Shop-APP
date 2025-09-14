@@ -1,0 +1,3 @@
+user_id,position_lat,position_long,shopping_history1,shopping_history2,shopping_history3,weather_temp,weather_condition1,weather_condition2,budget
+1,22.282,114.158,1,0,0,25,1,0,50
+2,22.285,114.160,0,1,0,28,0,1,100
