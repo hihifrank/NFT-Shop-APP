@@ -1,0 +1,580 @@
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%); }
+        .neon-glow { box-shadow: 0 0 20px rgba(255, 107, 107, 0.5); }
+        .festive-red { background: linear-gradient(135deg, #dc2626 0%, #f87171 100%); }
+        .festive-yellow { background: linear-gradient(135deg, #fbbf24 0%, #fde047 100%); }
+        .spin-animation { animation: spin 3s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .modal-backdrop { backdrop-filter: blur(8px); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .filter-active { background: linear-gradient(135deg, #dc2626 0%, #f87171 100%); color: white; }
+        .filter-inactive { background: white; color: #6b7280; }
+        .store-card-hover { transition: all 0.3s ease; }
+        .store-card-hover:hover { transform: scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .discount-badge { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+    </style>
+    <script>tailwind.config = {
+        "theme": {
+            "extend": {
+                "colors": {
+                    "hk-red": "#dc2626",
+                    "hk-yellow": "#fbbf24",
+                    "neon-pink": "#ff6b6b",
+                    "neon-blue": "#4ecdc4"
+                },
+                "fontFamily": {}
+            }
+        }
+    };</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"><style>
+    .highlighted-section {
+        outline: 2px solid #3F20FB;
+        background-color: rgba(63, 32, 251, 0.1);
+    }
+
+    .edit-button {
+        position: absolute;
+        z-index: 1000;
+    }
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    html, body {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style></head>
+<body class="bg-gray-50 dark:bg-gray-900">
+
+<div id="mobile-container" class="max-w-sm mx-auto bg-white dark:bg-gray-800 min-h-screen relative overflow-hidden">
+
+    <header id="explore-header" class="relative bg-gradient-to-r from-hk-red to-hk-yellow p-4 pb-6">
+        <div class="flex items-center justify-between mb-4">
+            <button class="text-white">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </button>
+            <h1 class="text-white font-bold text-lg">Explore Stores</h1>
+            <button class="text-white">
+                <i class="fas fa-search text-xl"></i>
+            </button>
+        </div>
+        <div class="text-center">
+            <h2 class="text-white text-xl font-bold mb-1">Discover Amazing Deals</h2>
+            <p class="text-white/80 text-sm">Browse stores by category &amp; save big</p>
+        </div>
+    </header>
+
+    <section id="filter-bar" class="p-4 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+        <div class="flex items-center space-x-2 overflow-x-auto scrollbar-hide">
+            <button class="filter-btn filter-active px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex items-center space-x-2" onclick="filterStores('all')">
+                <i class="fas fa-th-large"></i>
+                <span>All Stores</span>
+            </button>
+            <button class="filter-btn filter-inactive px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex items-center space-x-2" onclick="filterStores('toys')">
+                <i class="fas fa-rocket"></i>
+                <span>Toys &amp; Games</span>
+            </button>
+            <button class="filter-btn filter-inactive px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex items-center space-x-2" onclick="filterStores('electronics')">
+                <i class="fas fa-mobile-alt"></i>
+                <span>Electronics</span>
+            </button>
+            <button class="filter-btn filter-inactive px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex items-center space-x-2" onclick="filterStores('collectibles')">
+                <i class="fas fa-gem"></i>
+                <span>Collectibles</span>
+            </button>
+            <button class="filter-btn filter-inactive px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex items-center space-x-2" onclick="filterStores('antiques')">
+                <i class="fas fa-crown"></i>
+                <span>Antiques</span>
+            </button>
+            <button class="filter-btn filter-inactive px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex items-center space-x-2" onclick="filterStores('books')">
+                <i class="fas fa-book"></i>
+                <span>Books</span>
+            </button>
+        </div>
+    </section>
+
+    <section id="featured-deals" class="p-4 bg-gradient-to-b from-yellow-50 to-white dark:from-gray-800 dark:to-gray-700">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-gray-800 dark:text-white">Featured NFT Deals</h3>
+            <span class="text-xs bg-red-500 text-white px-2 py-1 rounded-full discount-badge">LIMITED NFT</span>
+        </div>
+
+        <div class="space-y-3">
+            <div class="store-card bg-white dark:bg-gray-700 rounded-xl p-4 shadow-lg store-card-hover cursor-pointer" onclick="showStoreDetails('vintage-toy-emporium')">
+                <div class="flex items-start space-x-3">
+                    <div class="relative">
+                        <img class="w-20 h-20 rounded-xl object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/d1e5107e12-a8d24f8b3148dc94961b.png" alt="vintage toy store with classic action figures collectible dolls and retro games display">
+                        <div class="absolute -top-2 -right-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs px-2 py-1 rounded-full font-bold flex items-center space-x-1">
+                            <i class="fas fa-cube text-xs"></i>
+                            <span>NFT</span>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-semibold text-gray-800 dark:text-white">Vintage Toy Emporium</h4>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <span class="text-sm text-gray-600 dark:text-gray-300">4.9</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Rare collectible toys &amp; vintage games</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
+                                <span class="text-xs text-gray-500">Tsim Sha Tsui, HK</span>
+                            </div>
+                            <span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full font-medium">Exclusive NFT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="store-card bg-white dark:bg-gray-700 rounded-xl p-4 shadow-lg store-card-hover cursor-pointer" onclick="showStoreDetails('retro-electronics')">
+                <div class="flex items-start space-x-3">
+                    <div class="relative">
+                        <img class="w-20 h-20 rounded-xl object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/00b928e874-0bce6e13bf62a2a86a3a.png" alt="retro electronics store with vintage computers gaming consoles and classic audio equipment">
+                        <div class="absolute -top-2 -right-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs px-2 py-1 rounded-full font-bold flex items-center space-x-1">
+                            <i class="fas fa-cube text-xs"></i>
+                            <span>NFT</span>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-semibold text-gray-800 dark:text-white">Retro Electronics Hub</h4>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <span class="text-sm text-gray-600 dark:text-gray-300">4.7</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Vintage computers &amp; gaming consoles</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-map-marker-alt text-blue-500 text-xs"></i>
+                                <span class="text-xs text-gray-500">Causeway Bay, HK</span>
+                            </div>
+                            <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full font-medium">Gaming NFT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="store-categories" class="p-4 bg-white dark:bg-gray-800">
+        <h3 class="font-bold text-gray-800 dark:text-white mb-4">Browse by Category</h3>
+
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="category-card bg-gradient-to-br from-red-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 text-center card-hover cursor-pointer" onclick="filterStores('toys')">
+                <i class="fas fa-rocket text-red-500 text-2xl mb-2"></i>
+                <h4 class="font-semibold text-sm text-gray-800 dark:text-white mb-1">Toys &amp; Games</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300">85 stores</p>
+            </div>
+
+            <div class="category-card bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 text-center card-hover cursor-pointer" onclick="filterStores('electronics')">
+                <i class="fas fa-mobile-alt text-purple-500 text-2xl mb-2"></i>
+                <h4 class="font-semibold text-sm text-gray-800 dark:text-white mb-1">Electronics</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300">67 stores</p>
+            </div>
+
+            <div class="category-card bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 text-center card-hover cursor-pointer" onclick="filterStores('collectibles')">
+                <i class="fas fa-gem text-blue-500 text-2xl mb-2"></i>
+                <h4 class="font-semibold text-sm text-gray-800 dark:text-white mb-1">Collectibles</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300">92 stores</p>
+            </div>
+
+            <div class="category-card bg-gradient-to-br from-green-50 to-teal-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 text-center card-hover cursor-pointer" onclick="filterStores('antiques')">
+                <i class="fas fa-crown text-green-500 text-2xl mb-2"></i>
+                <h4 class="font-semibold text-sm text-gray-800 dark:text-white mb-1">Antiques</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300">34 stores</p>
+            </div>
+
+            <div class="category-card bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 text-center card-hover cursor-pointer" onclick="filterStores('books')">
+                <i class="fas fa-book text-yellow-500 text-2xl mb-2"></i>
+                <h4 class="font-semibold text-sm text-gray-800 dark:text-white mb-1">Books</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300">48 stores</p>
+            </div>
+
+            <div class="category-card bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 text-center card-hover cursor-pointer" onclick="filterStores('art')">
+                <i class="fas fa-palette text-indigo-500 text-2xl mb-2"></i>
+                <h4 class="font-semibold text-sm text-gray-800 dark:text-white mb-1">Art &amp; Crafts</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300">29 stores</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="all-stores" class="p-4 bg-gray-50 dark:bg-gray-700">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-gray-800 dark:text-white">All Stores</h3>
+            <div class="flex items-center space-x-2">
+                <button class="text-gray-600 dark:text-gray-400">
+                    <i class="fas fa-sort text-sm"></i>
+                </button>
+                <button class="text-gray-600 dark:text-gray-400">
+                    <i class="fas fa-filter text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="space-y-3">
+            <div class="store-item toys bg-white dark:bg-gray-600 rounded-xl p-4 shadow-md store-card-hover cursor-pointer" onclick="showStoreDetails('action-figure-kingdom')">
+                <div class="flex items-center space-x-3">
+                    <img class="w-16 h-16 rounded-lg object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/0c226cb5d8-8b7d5815cc7e78aa33de.png" alt="action figure store with superhero collectibles anime figures and display cases">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Action Figure Kingdom</h4>
+                            <span class="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-600 px-2 py-1 rounded-full text-xs font-bold flex items-center space-x-1">
+                                    <i class="fas fa-cube text-xs"></i>
+                                    <span>NFT</span>
+                                </span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Exclusive superhero &amp; anime figures</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <span class="text-xs text-gray-600 dark:text-gray-300">4.8</span>
+                                <span class="text-xs text-gray-500">(324 reviews)</span>
+                            </div>
+                            <span class="text-xs text-gray-500">0.8 km away</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="store-item electronics bg-white dark:bg-gray-600 rounded-xl p-4 shadow-md store-card-hover cursor-pointer" onclick="showStoreDetails('vintage-tech-vault')">
+                <div class="flex items-center space-x-3">
+                    <img class="w-16 h-16 rounded-lg object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/1b12fb0d44-eb94d4a501515cedca8e.png" alt="vintage electronics store with old computers gaming systems and retro gadgets">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Vintage Tech Vault</h4>
+                            <span class="bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-600 px-2 py-1 rounded-full text-xs font-bold flex items-center space-x-1">
+                                    <i class="fas fa-cube text-xs"></i>
+                                    <span>NFT</span>
+                                </span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Rare vintage computers &amp; consoles</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <span class="text-xs text-gray-600 dark:text-gray-300">4.6</span>
+                                <span class="text-xs text-gray-500">(189 reviews)</span>
+                            </div>
+                            <span class="text-xs text-gray-500">1.2 km away</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="store-item collectibles bg-white dark:bg-gray-600 rounded-xl p-4 shadow-md store-card-hover cursor-pointer" onclick="showStoreDetails('rare-treasures')">
+                <div class="flex items-center space-x-3">
+                    <img class="w-16 h-16 rounded-lg object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/a656c227b6-58cefe0c868ed16850e0.png" alt="collectibles store with rare coins stamps trading cards and memorabilia displays">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Rare Treasures Co.</h4>
+                            <span class="bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-600 px-2 py-1 rounded-full text-xs font-bold flex items-center space-x-1">
+                                    <i class="fas fa-cube text-xs"></i>
+                                    <span>NFT</span>
+                                </span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Trading cards &amp; rare collectibles</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <span class="text-xs text-gray-600 dark:text-gray-300">4.7</span>
+                                <span class="text-xs text-gray-500">(256 reviews)</span>
+                            </div>
+                            <span class="text-xs text-gray-500">0.5 km away</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="store-item antiques bg-white dark:bg-gray-600 rounded-xl p-4 shadow-md store-card-hover cursor-pointer" onclick="showStoreDetails('heritage-antiques')">
+                <div class="flex items-center space-x-3">
+                    <img class="w-16 h-16 rounded-lg object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/9f35100d4e-7efacd475836697d39e0.png" alt="antique store with vintage furniture porcelain vases and historical artifacts">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Heritage Antiques</h4>
+                            <span class="bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-600 px-2 py-1 rounded-full text-xs font-bold flex items-center space-x-1">
+                                    <i class="fas fa-cube text-xs"></i>
+                                    <span>NFT</span>
+                                </span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Authentic antique furniture &amp; artifacts</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <span class="text-xs text-gray-600 dark:text-gray-300">4.9</span>
+                                <span class="text-xs text-gray-500">(412 reviews)</span>
+                            </div>
+                            <span class="text-xs text-gray-500">1.5 km away</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="store-item books bg-white dark:bg-gray-600 rounded-xl p-4 shadow-md store-card-hover cursor-pointer" onclick="showStoreDetails('rare-books-library')">
+                <div class="flex items-center space-x-3">
+                    <img class="w-16 h-16 rounded-lg object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/ba965de760-2338b8e67c284fe77cc5.png" alt="rare bookstore with vintage leather bound books manuscripts and literary collections">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Rare Books Library</h4>
+                            <span class="bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-600 px-2 py-1 rounded-full text-xs font-bold flex items-center space-x-1">
+                                    <i class="fas fa-cube text-xs"></i>
+                                    <span>NFT</span>
+                                </span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">First editions &amp; rare manuscripts</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <span class="text-xs text-gray-600 dark:text-gray-300">4.5</span>
+                                <span class="text-xs text-gray-500">(178 reviews)</span>
+                            </div>
+                            <span class="text-xs text-gray-500">2.1 km away</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="store-item toys bg-white dark:bg-gray-600 rounded-xl p-4 shadow-md store-card-hover cursor-pointer" onclick="showStoreDetails('model-kit-paradise')">
+                <div class="flex items-center space-x-3">
+                    <img class="w-16 h-16 rounded-lg object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/09350c7ebc-52be39a6d9b45f500685.png" alt="model kit store with gundam models aircraft kits and detailed miniature collections">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Model Kit Paradise</h4>
+                            <span class="bg-gradient-to-r from-red-100 to-pink-100 text-red-600 px-2 py-1 rounded-full text-xs font-bold flex items-center space-x-1">
+                                    <i class="fas fa-cube text-xs"></i>
+                                    <span>NFT</span>
+                                </span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Premium Gundam &amp; scale models</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <span class="text-xs text-gray-600 dark:text-gray-300">4.4</span>
+                                <span class="text-xs text-gray-500">(298 reviews)</span>
+                            </div>
+                            <span class="text-xs text-gray-500">0.3 km away</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="trending-searches" class="p-4 bg-white dark:bg-gray-800">
+        <h3 class="font-bold text-gray-800 dark:text-white mb-4">Trending Searches</h3>
+
+        <div class="flex flex-wrap gap-2">
+            <span class="bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-full text-sm">#ActionFigures</span>
+            <span class="bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-full text-sm">#VintageElectronics</span>
+            <span class="bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-full text-sm">#TradingCards</span>
+            <span class="bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-full text-sm">#RareBooks</span>
+            <span class="bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-full text-sm">#Antiques</span>
+            <span class="bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-full text-sm">#ModelKits</span>
+            <span class="bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-full text-sm">#Collectibles</span>
+            <span class="bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-full text-sm">#RetroGaming</span>
+        </div>
+    </section>
+
+    <section id="store-stats" class="p-4 bg-gray-50 dark:bg-gray-700 mb-20">
+        <div class="grid grid-cols-3 gap-4">
+            <div class="stat-item bg-white dark:bg-gray-600 rounded-xl p-3 text-center">
+                <i class="fas fa-store text-hk-red text-xl mb-2"></i>
+                <p class="font-bold text-lg text-gray-800 dark:text-white">450+</p>
+                <p class="text-xs text-gray-600 dark:text-gray-300">Partner Stores</p>
+            </div>
+            <div class="stat-item bg-white dark:bg-gray-600 rounded-xl p-3 text-center">
+                <i class="fas fa-percentage text-hk-yellow text-xl mb-2"></i>
+                <p class="font-bold text-lg text-gray-800 dark:text-white">35%</p>
+                <p class="text-xs text-gray-600 dark:text-gray-300">Avg Discount</p>
+            </div>
+            <div class="stat-item bg-white dark:bg-gray-600 rounded-xl p-3 text-center">
+                <i class="fas fa-users text-neon-pink text-xl mb-2"></i>
+                <p class="font-bold text-lg text-gray-800 dark:text-white">12.5K</p>
+                <p class="text-xs text-gray-600 dark:text-gray-300">Happy Customers</p>
+            </div>
+        </div>
+    </section>
+
+    <nav id="bottom-navigation" class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex items-center justify-around py-2">
+            <button class="nav-item flex flex-col items-center py-2 px-3 text-gray-600 dark:text-gray-400">
+                <i class="fas fa-home text-lg mb-1"></i>
+                <span class="text-xs">Home</span>
+            </button>
+            <button class="nav-item flex flex-col items-center py-2 px-3 text-neon-pink">
+                <i class="fas fa-compass text-lg mb-1"></i>
+                <span class="text-xs font-semibold">Explore</span>
+            </button>
+            <button class="nav-item flex flex-col items-center py-2 px-3 text-gray-600 dark:text-gray-400">
+                <i class="fas fa-tags text-lg mb-1"></i>
+                <span class="text-xs">NFT Deals</span>
+            </button>
+            <button class="nav-item flex flex-col items-center py-2 px-3 text-gray-600 dark:text-gray-400">
+                <i class="fas fa-heart text-lg mb-1"></i>
+                <span class="text-xs">Favorites</span>
+            </button>
+            <button class="nav-item flex flex-col items-center py-2 px-3 text-gray-600 dark:text-gray-400">
+                <i class="fas fa-user text-lg mb-1"></i>
+                <span class="text-xs">Profile</span>
+            </button>
+        </div>
+    </nav>
+
+    <div id="store-details-modal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-sm mx-auto max-h-[80vh] overflow-y-auto">
+            <div class="sticky top-0 bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700 rounded-t-2xl">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-lg text-gray-800 dark:text-white">Store Details</h3>
+                    <button onclick="closeStoreDetails()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="store-details-content" class="p-4">
+                <div class="store-header mb-4">
+                    <img class="w-full h-32 rounded-xl object-cover mb-3" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/2af92b53f1-c1921149df0e105e4e05.png" alt="vintage toy emporium with classic collectible toys action figures and rare gaming items">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-bold text-xl text-gray-800 dark:text-white">Vintage Toy Emporium</h4>
+                        <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-sm font-bold flex items-center space-x-1">
+                                <i class="fas fa-cube text-xs"></i>
+                                <span>NFT</span>
+                            </span>
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Rare collectible toys &amp; vintage games</p>
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="flex items-center space-x-1">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <span class="font-semibold text-gray-800 dark:text-white">4.9</span>
+                            <span class="text-sm text-gray-500">(542 reviews)</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <i class="fas fa-map-marker-alt text-red-500"></i>
+                            <span class="text-sm text-gray-500">Tsim Sha Tsui, HK</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="store-offers mb-4">
+                    <h5 class="font-semibold text-gray-800 dark:text-white mb-3">Available NFT Coupons</h5>
+                    <div class="space-y-2">
+                        <div class="offer-item bg-gradient-to-r from-purple-50 to-pink-50 dark:bg-gray-700 rounded-lg p-3 border border-purple-200">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-medium text-sm text-gray-800 dark:text-white">Limited Edition Action Figure</span>
+                                <span class="text-purple-600 font-bold text-sm flex items-center space-x-1">
+                                        <i class="fas fa-cube text-xs"></i>
+                                        <span>NFT Coupon</span>
+                                    </span>
+                            </div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300">Exclusive NFT for vintage superhero figures</p>
+                            <p class="text-xs text-purple-600 font-medium">Valid until Dec 31, 2024</p>
+                        </div>
+                        <div class="offer-item bg-gradient-to-r from-blue-50 to-cyan-50 dark:bg-gray-700 rounded-lg p-3 border border-blue-200">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-medium text-sm text-gray-800 dark:text-white">Rare Gaming Console</span>
+                                <span class="text-blue-600 font-bold text-sm flex items-center space-x-1">
+                                        <i class="fas fa-cube text-xs"></i>
+                                        <span>NFT Coupon</span>
+                                    </span>
+                            </div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300">Digital certificate for retro gaming systems</p>
+                            <p class="text-xs text-blue-600 font-medium">Valid until Jan 15, 2025</p>
+                        </div>
+                        <div class="offer-item bg-gradient-to-r from-green-50 to-emerald-50 dark:bg-gray-700 rounded-lg p-3 border border-green-200">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-medium text-sm text-gray-800 dark:text-white">Collector's Bundle</span>
+                                <span class="text-green-600 font-bold text-sm flex items-center space-x-1">
+                                        <i class="fas fa-cube text-xs"></i>
+                                        <span>NFT Pack</span>
+                                    </span>
+                            </div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300">Multiple NFT coupons for toy collections</p>
+                            <p class="text-xs text-green-600 font-medium">Limited time offer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="store-info mb-4">
+                    <h5 class="font-semibold text-gray-800 dark:text-white mb-3">Store Information</h5>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-clock text-gray-500 w-4"></i>
+                            <span class="text-gray-600 dark:text-gray-300">Mon-Sun: 10:00 AM - 9:00 PM</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-phone text-gray-500 w-4"></i>
+                            <span class="text-gray-600 dark:text-gray-300">+852 2567 8901</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-map-marker-alt text-gray-500 w-4"></i>
+                            <span class="text-gray-600 dark:text-gray-300">Shop 15B, Harbour City, Tsim Sha Tsui, HK</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons flex space-x-3">
+                    <button class="flex-1 bg-gradient-to-r from-hk-red to-hk-yellow text-white font-bold py-3 rounded-xl">
+                        <i class="fas fa-cube mr-2"></i>Get NFT Coupon
+                    </button>
+                    <button class="flex-1 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white font-semibold py-3 rounded-xl">
+                        <i class="fas fa-heart mr-2"></i>Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterStores(category) {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const storeItems = document.querySelectorAll('.store-item');
+
+        filterButtons.forEach(btn => {
+            btn.classList.remove('filter-active');
+            btn.classList.add('filter-inactive');
+        });
+
+        event.target.closest('.filter-btn').classList.add('filter-active');
+        event.target.closest('.filter-btn').classList.remove('filter-inactive');
+
+        storeItems.forEach(item => {
+            if (category === 'all' || item.classList.contains(category)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    function showStoreDetails(storeId) {
+        document.getElementById('store-details-modal').classList.remove('hidden');
+    }
+
+    function closeStoreDetails() {
+        document.getElementById('store-details-modal').classList.add('hidden');
+    }
+
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-backdrop')) {
+            e.target.classList.add('hidden');
+        }
+    });
+</script>
+
+</body></html>

@@ -1,0 +1,771 @@
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%); }
+        .neon-glow { box-shadow: 0 0 20px rgba(255, 107, 107, 0.5); }
+        .festive-red { background: linear-gradient(135deg, #dc2626 0%, #f87171 100%); }
+        .festive-yellow { background: linear-gradient(135deg, #fbbf24 0%, #fde047 100%); }
+        .spin-animation { animation: spin 3s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .modal-backdrop { backdrop-filter: blur(8px); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .rarity-common { background: linear-gradient(45deg, #6b7280, #9ca3af); }
+        .rarity-rare { background: linear-gradient(45deg, #3b82f6, #60a5fa); }
+        .rarity-epic { background: linear-gradient(45deg, #8b5cf6, #a78bfa); }
+        .rarity-legendary { background: linear-gradient(45deg, #f59e0b, #fbbf24); }
+        .pulse-glow { animation: pulse-glow 2s infinite; }
+        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 10px rgba(255, 107, 107, 0.5); } 50% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.8); } }
+    </style>
+    <script>tailwind.config = {
+        "theme": {
+            "extend": {
+                "colors": {
+                    "hk-red": "#dc2626",
+                    "hk-yellow": "#fbbf24",
+                    "neon-pink": "#ff6b6b",
+                    "neon-blue": "#4ecdc4"
+                },
+                "fontFamily": {}
+            }
+        }
+    };</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"><style>
+    .highlighted-section {
+        outline: 2px solid #3F20FB;
+        background-color: rgba(63, 32, 251, 0.1);
+    }
+
+    .edit-button {
+        position: absolute;
+        z-index: 1000;
+    }
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    html, body {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style></head>
+<body class="bg-gray-50 dark:bg-gray-900">
+
+<div id="mobile-container" class="max-w-sm mx-auto bg-white dark:bg-gray-800 min-h-screen relative overflow-hidden">
+
+    <header id="main-header" class="relative bg-gradient-to-r from-hk-red to-hk-yellow p-4 pb-6">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-shopping-bag text-white text-xl"></i>
+                <h1 class="text-white font-bold text-lg">ShopTransit</h1>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button id="language-toggle" class="bg-white/20 backdrop-blur-sm rounded-full p-2">
+                    <i class="fas fa-globe text-white text-sm"></i>
+                </button>
+                <button id="dark-mode-toggle" class="bg-white/20 backdrop-blur-sm rounded-full p-2">
+                    <i class="fas fa-moon text-white text-sm"></i>
+                </button>
+                <button id="wallet-connect" class="bg-white text-hk-red px-4 py-2 rounded-full text-sm font-semibold flex items-center space-x-2">
+                    <i class="fab fa-ethereum text-sm"></i>
+                    <span>Connect</span>
+                </button>
+            </div>
+        </div>
+        <div class="text-center">
+            <h2 class="text-white text-2xl font-bold mb-1">NFT Deals</h2>
+            <p class="text-white/80 text-sm">Exclusive Hong Kong Shop Coupons</p>
+        </div>
+    </header>
+
+    <section id="ai-recommendations" class="p-4 bg-gradient-to-b from-yellow-50 to-white dark:from-gray-800 dark:to-gray-700">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-robot text-neon-pink text-lg"></i>
+                <h3 class="font-bold text-gray-800 dark:text-white">AI Recommended</h3>
+            </div>
+            <span class="text-xs bg-neon-pink text-white px-2 py-1 rounded-full pulse-glow">LIVE</span>
+        </div>
+
+        <div class="space-y-3">
+            <div class="coupon-card bg-white dark:bg-gray-700 rounded-xl p-4 shadow-lg card-hover cursor-pointer" onclick="showCouponDetails('tea-house')">
+                <div class="flex items-start space-x-3">
+                    <div class="relative">
+                        <img class="w-16 h-16 rounded-lg object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/6bdd8fc06b-b016529b904f922b1c9f.png" alt="elegant tea house storefront with traditional Chinese decorations and warm lighting">
+                        <div class="absolute -top-2 -right-2 rarity-rare text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-gem"></i> Rare
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-semibold text-gray-800 dark:text-white text-sm">Morning Tea House</h4>
+                            <span class="text-hk-red font-bold text-sm">Free Dim Sum NFT</span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Har Gow NFT Coupon - Collectible &amp; Redeemable</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-500">Valid: Dec 31</span>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <span class="text-xs text-gray-600 dark:text-gray-300">4.8</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="coupon-card bg-white dark:bg-gray-700 rounded-xl p-4 shadow-lg card-hover cursor-pointer" onclick="showCouponDetails('bookstore-cafe')">
+                <div class="flex items-start space-x-3">
+                    <div class="relative">
+                        <img class="w-16 h-16 rounded-lg object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/18b3e35e00-d53a34103ad93194edae.png" alt="bookstore cafe with cozy reading atmosphere">
+                        <div class="absolute -top-2 -right-2 rarity-epic text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-crown"></i> Epic
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-semibold text-gray-800 dark:text-white text-sm">Literary Corner</h4>
+                            <span class="text-hk-red font-bold text-sm">Book NFT Token</span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Vintage Book Cover NFT - Free latte included</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-500">Valid: Jan 15</span>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <span class="text-xs text-gray-600 dark:text-gray-300">4.7</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="coupon-card bg-white dark:bg-gray-700 rounded-xl p-4 shadow-lg card-hover cursor-pointer" onclick="showCouponDetails('fashion-retail')">
+                <div class="flex items-start space-x-3">
+                    <div class="relative">
+                        <img class="w-16 h-16 rounded-lg object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/043f2faa62-1cfc594f653ea486bfb4.png" alt="modern fashion boutique with neon lights and trendy clothing displays">
+                        <div class="absolute -top-2 -right-2 rarity-legendary text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-trophy"></i> Legend
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-semibold text-gray-800 dark:text-white text-sm">Style District</h4>
+                            <span class="text-hk-red font-bold text-sm">Designer NFT</span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Limited Edition Accessory NFT Token</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-500">Valid: Dec 25</span>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <span class="text-xs text-gray-600 dark:text-gray-300">4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="combo-kits" class="p-4 bg-white dark:bg-gray-800">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-gray-800 dark:text-white">Cross-Store NFT Bundles</h3>
+            <button class="text-neon-pink text-sm font-medium">View All</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+            <div class="combo-card bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3 card-hover cursor-pointer" onclick="showQRCode('tea-book')">
+                <img class="w-full h-20 rounded-lg object-cover mb-3" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/679c241f3e-ab87d69431010df979de.png" alt="morning tea restaurant and bookstore combination">
+                <h4 class="font-semibold text-sm text-gray-800 dark:text-white mb-1">Tea + Books</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Dim Sum NFT + Novel Token Bundle</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-hk-red font-bold text-sm">$35 HKD</span>
+                    <i class="fas fa-qrcode text-gray-400"></i>
+                </div>
+            </div>
+
+            <div class="combo-card bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3 card-hover cursor-pointer" onclick="showQRCode('fashion-tea')">
+                <img class="w-full h-20 rounded-lg object-cover mb-3" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/c71fb6ad9c-0105501dc0ebcfbea66c.png" alt="fashion boutique and traditional tea house combination">
+                <h4 class="font-semibold text-sm text-gray-800 dark:text-white mb-1">Style + Tea</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Fashion NFT + Premium Tea Set</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-hk-red font-bold text-sm">$68 HKD</span>
+                    <i class="fas fa-qrcode text-gray-400"></i>
+                </div>
+            </div>
+
+            <div class="combo-card bg-gradient-to-br from-green-50 to-yellow-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3 card-hover cursor-pointer" onclick="showQRCode('retail-morning')">
+                <img class="w-full h-20 rounded-lg object-cover mb-3" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/a312f99e6c-9ec209d48911f0271df0.png" alt="retail store and morning tea house cross-promotion">
+                <h4 class="font-semibold text-sm text-gray-800 dark:text-white mb-1">Shop + Morning Tea</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Retail NFT + Breakfast Set Token</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-hk-red font-bold text-sm">$48 HKD</span>
+                    <i class="fas fa-qrcode text-gray-400"></i>
+                </div>
+            </div>
+
+            <div class="combo-card bg-gradient-to-br from-pink-50 to-red-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3 card-hover cursor-pointer" onclick="showQRCode('tea-culture')">
+                <img class="w-full h-20 rounded-lg object-cover mb-3" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/e15cf277b0-84c1d3459ab3560631ae.png" alt="traditional tea ceremony and cultural retail experience">
+                <h4 class="font-semibold text-sm text-gray-800 dark:text-white mb-1">Tea Culture</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Tea Ceremony NFT + Cultural Souvenir</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-hk-red font-bold text-sm">$58 HKD</span>
+                    <i class="fas fa-qrcode text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="trending-deals" class="p-4 bg-gray-50 dark:bg-gray-700">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-gray-800 dark:text-white">Trending NFT Coupons</h3>
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-fire text-orange-500"></i>
+                <span class="text-orange-500 text-sm font-medium">Hot</span>
+            </div>
+        </div>
+
+        <div class="space-y-3">
+            <div class="trending-card bg-white dark:bg-gray-600 rounded-xl p-4 shadow-md card-hover">
+                <div class="flex items-center space-x-3">
+                    <img class="w-12 h-12 rounded-full object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/2f8fe99bac-483c21fc9eb290516dc7.png" alt="trendy bubble tea shop with colorful drinks">
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Pearl Tea House</h4>
+                        <p class="text-xs text-gray-600 dark:text-gray-300">Signature Pearl Milk Tea NFT</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-hk-red font-bold text-sm">Free Drink NFT</span>
+                        <p class="text-xs text-gray-500">1.2k minted</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trending-card bg-white dark:bg-gray-600 rounded-xl p-4 shadow-md card-hover">
+                <div class="flex items-center space-x-3">
+                    <img class="w-12 h-12 rounded-full object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/18b3e35e00-d53a34103ad93194edae.png" alt="bookstore cafe with cozy reading atmosphere">
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Reader's Haven</h4>
+                        <p class="text-xs text-gray-600 dark:text-gray-300">Classic Literature NFT Collection</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-hk-red font-bold text-sm">Book + Coffee</span>
+                        <p class="text-xs text-gray-500">856 minted</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trending-card bg-white dark:bg-gray-600 rounded-xl p-4 shadow-md card-hover">
+                <div class="flex items-center space-x-3">
+                    <img class="w-12 h-12 rounded-full object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/d1ea847937-fd0a16ec0f9424334e1d.png" alt="artisan bakery with fresh pastries and bread">
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Golden Bakery</h4>
+                        <p class="text-xs text-gray-600 dark:text-gray-300">Fresh Pineapple Bun NFT Token</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-hk-red font-bold text-sm">Daily Special</span>
+                        <p class="text-xs text-gray-500">642 minted</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="nft-collections" class="p-4 bg-white dark:bg-gray-800">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-gray-800 dark:text-white">Featured Collections</h3>
+            <button class="text-neon-pink text-sm font-medium">Browse All</button>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+            <div class="collection-card bg-gradient-to-br from-purple-100 to-pink-100 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3 text-center card-hover">
+                <img class="w-full h-16 rounded-lg object-cover mb-2" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/21c4839c57-fcb24500e2c3656a0308.png" alt="hong kong street food vendors with neon signs">
+                <h4 class="font-semibold text-xs text-gray-800 dark:text-white mb-1">Street Food</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300">24 NFTs</p>
+            </div>
+
+            <div class="collection-card bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3 text-center card-hover">
+                <img class="w-full h-16 rounded-lg object-cover mb-2" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/a3f703576c-e55682bbacb281a24b2d.png" alt="hong kong shopping malls with luxury brands">
+                <h4 class="font-semibold text-xs text-gray-800 dark:text-white mb-1">Shopping</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300">18 NFTs</p>
+            </div>
+
+            <div class="collection-card bg-gradient-to-br from-green-100 to-yellow-100 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3 text-center card-hover">
+                <img class="w-full h-16 rounded-lg object-cover mb-2" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/07ffaaeed9-7bcc6c5875c66c86b962.png" alt="hong kong entertainment venues with karaoke and bars">
+                <h4 class="font-semibold text-xs text-gray-800 dark:text-white mb-1">Entertainment</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300">32 NFTs</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="lucky-draw-section" class="p-4 bg-gradient-to-br from-red-50 to-yellow-50 dark:from-gray-700 dark:to-gray-600">
+        <div class="text-center mb-4">
+            <h3 class="font-bold text-gray-800 dark:text-white text-lg mb-2">NFT Lucky Draw</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300">Spin to win exclusive prizes!</p>
+        </div>
+
+        <div class="bg-white dark:bg-gray-700 rounded-2xl p-6 text-center shadow-lg">
+            <div class="relative w-32 h-32 mx-auto mb-4">
+                <img class="w-full h-full rounded-full object-cover border-4 border-hk-yellow" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/0e4c3768c8-9524d6dd3f25388c9794.png" alt="colorful spinning wheel with prize segments and festive decorations">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <i class="fas fa-play text-white text-2xl bg-hk-red rounded-full p-3"></i>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 mb-4 text-xs">
+                <div class="bg-yellow-100 dark:bg-gray-600 rounded-lg p-2">
+                    <i class="fas fa-gift text-yellow-600 mb-1"></i>
+                    <p class="font-semibold text-gray-800 dark:text-white">Shop Badges</p>
+                </div>
+                <div class="bg-red-100 dark:bg-gray-600 rounded-lg p-2">
+                    <i class="fas fa-ticket text-red-600 mb-1"></i>
+                    <p class="font-semibold text-gray-800 dark:text-white">Premium Coupons</p>
+                </div>
+                <div class="bg-blue-100 dark:bg-gray-600 rounded-lg p-2">
+                    <i class="fas fa-star text-blue-600 mb-1"></i>
+                    <p class="font-semibold text-gray-800 dark:text-white">Rare NFTs</p>
+                </div>
+                <div class="bg-purple-100 dark:bg-gray-600 rounded-lg p-2">
+                    <i class="fas fa-crown text-purple-600 mb-1"></i>
+                    <p class="font-semibold text-gray-800 dark:text-white">VIP Access</p>
+                </div>
+            </div>
+
+            <button id="spin-wheel-btn" class="w-full bg-gradient-to-r from-hk-red to-hk-yellow text-white font-bold py-3 rounded-xl neon-glow" onclick="showLuckyDraw()">
+                <i class="fas fa-dice mr-2"></i>
+                Spin Now (5 NFT Tokens)
+            </button>
+        </div>
+    </section>
+
+    <section id="recent-winners" class="p-4 bg-white dark:bg-gray-800">
+        <h3 class="font-bold text-gray-800 dark:text-white mb-4">Recent Winners</h3>
+
+        <div class="space-y-3">
+            <div class="winner-card flex items-center space-x-3 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-10 h-10 rounded-full" alt="Winner">
+                <div class="flex-1">
+                    <p class="font-semibold text-sm text-gray-800 dark:text-white">Sarah L.</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-300">Won Premium Coffee Coupon</p>
+                </div>
+                <div class="text-right">
+                    <i class="fas fa-trophy text-yellow-500"></i>
+                    <p class="text-xs text-gray-500">2 mins ago</p>
+                </div>
+            </div>
+
+            <div class="winner-card flex items-center space-x-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" class="w-10 h-10 rounded-full" alt="Winner">
+                <div class="flex-1">
+                    <p class="font-semibold text-sm text-gray-800 dark:text-white">Mike C.</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-300">Won VIP Shopping Badge</p>
+                </div>
+                <div class="text-right">
+                    <i class="fas fa-medal text-blue-500"></i>
+                    <p class="text-xs text-gray-500">15 mins ago</p>
+                </div>
+            </div>
+
+            <div class="winner-card flex items-center space-x-3 bg-gradient-to-r from-green-50 to-teal-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-7.jpg" class="w-10 h-10 rounded-full" alt="Winner">
+                <div class="flex-1">
+                    <p class="font-semibold text-sm text-gray-800 dark:text-white">Emma W.</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-300">Won Rare NFT Collection</p>
+                </div>
+                <div class="text-right">
+                    <i class="fas fa-gem text-green-500"></i>
+                    <p class="text-xs text-gray-500">1 hour ago</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="marketplace-stats" class="p-4 bg-gray-50 dark:bg-gray-700">
+        <h3 class="font-bold text-gray-800 dark:text-white mb-4">Marketplace Stats</h3>
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="stat-card bg-white dark:bg-gray-600 rounded-xl p-4 text-center">
+                <i class="fas fa-users text-neon-pink text-2xl mb-2"></i>
+                <p class="font-bold text-lg text-gray-800 dark:text-white">12.5K</p>
+                <p class="text-xs text-gray-600 dark:text-gray-300">Active Users</p>
+            </div>
+            <div class="stat-card bg-white dark:bg-gray-600 rounded-xl p-4 text-center">
+                <i class="fas fa-ticket text-hk-yellow text-2xl mb-2"></i>
+                <p class="font-bold text-lg text-gray-800 dark:text-white">8.9K</p>
+                <p class="text-xs text-gray-600 dark:text-gray-300">Coupons Redeemed</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+            <div class="mini-stat bg-white dark:bg-gray-600 rounded-lg p-3 text-center">
+                <i class="fas fa-store text-blue-500 mb-1"></i>
+                <p class="font-bold text-sm text-gray-800 dark:text-white">450+</p>
+                <p class="text-xs text-gray-600 dark:text-gray-300">Shops</p>
+            </div>
+            <div class="mini-stat bg-white dark:bg-gray-600 rounded-lg p-3 text-center">
+                <i class="fas fa-image text-purple-500 mb-1"></i>
+                <p class="font-bold text-sm text-gray-800 dark:text-white">2.1K</p>
+                <p class="text-xs text-gray-600 dark:text-gray-300">NFTs</p>
+            </div>
+            <div class="mini-stat bg-white dark:bg-gray-600 rounded-lg p-3 text-center">
+                <i class="fas fa-coins text-yellow-500 mb-1"></i>
+                <p class="font-bold text-sm text-gray-800 dark:text-white">$89K</p>
+                <p class="text-xs text-gray-600 dark:text-gray-300">Volume</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="featured-shops" class="p-4 bg-white dark:bg-gray-800">
+        <h3 class="font-bold text-gray-800 dark:text-white mb-4">Featured Partner Shops</h3>
+
+        <div class="space-y-3">
+            <div class="shop-card bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 card-hover">
+                <div class="flex items-center space-x-3">
+                    <img class="w-16 h-16 rounded-xl object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/0aceafcc47-8600ac320453dddfe6de.png" alt="traditional hong kong dim sum restaurant with red lanterns">
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-gray-800 dark:text-white">Golden Dragon Tea House</h4>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">Traditional Morning Tea &amp; Dim Sum</p>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
+                            <span class="text-xs text-gray-500">Central District, HK</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="bg-red-100 dark:bg-gray-500 text-red-600 dark:text-red-400 px-2 py-1 rounded-full text-xs font-medium mb-1">
+                            Har Gow NFT
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-400 text-xs mr-1"></i>
+                            <span class="text-xs text-gray-600 dark:text-gray-300">4.9</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-card bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 card-hover">
+                <div class="flex items-center space-x-3">
+                    <img class="w-16 h-16 rounded-xl object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/e08d22ce89-5954f3ff23a4b6430068.png" alt="modern bookstore with coffee corner and reading areas">
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-gray-800 dark:text-white">Literary Brew Cafe</h4>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">Books &amp; Artisan Coffee</p>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-map-marker-alt text-blue-500 text-xs"></i>
+                            <span class="text-xs text-gray-500">Causeway Bay, HK</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="bg-blue-100 dark:bg-gray-500 text-blue-600 dark:text-blue-400 px-2 py-1 rounded-full text-xs font-medium mb-1">
+                            Novel + Latte
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-400 text-xs mr-1"></i>
+                            <span class="text-xs text-gray-600 dark:text-gray-300">4.7</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-card bg-gradient-to-r from-green-50 to-emerald-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 card-hover">
+                <div class="flex items-center space-x-3">
+                    <img class="w-16 h-16 rounded-xl object-cover" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/e0dbd8d81d-26eaa602142d0afc80f8.png" alt="trendy fashion boutique with designer clothes and accessories">
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-gray-800 dark:text-white">Heritage Fashion House</h4>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">Traditional &amp; Modern Retail</p>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-map-marker-alt text-green-500 text-xs"></i>
+                            <span class="text-xs text-gray-500">Tsim Sha Tsui, HK</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="bg-green-100 dark:bg-gray-500 text-green-600 dark:text-green-400 px-2 py-1 rounded-full text-xs font-medium mb-1">
+                            Accessory NFT
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-400 text-xs mr-1"></i>
+                            <span class="text-xs text-gray-600 dark:text-gray-300">4.8</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="wallet-info" class="p-4 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 mb-20">
+        <div class="bg-white dark:bg-gray-600 rounded-2xl p-4 shadow-lg">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-gray-800 dark:text-white">My Wallet</h3>
+                <button class="text-neon-pink text-sm font-medium">View Details</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="text-center">
+                    <i class="fab fa-ethereum text-blue-500 text-2xl mb-2"></i>
+                    <p class="font-bold text-lg text-gray-800 dark:text-white">0.25 ETH</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-300">Balance</p>
+                </div>
+                <div class="text-center">
+                    <i class="fas fa-coins text-yellow-500 text-2xl mb-2"></i>
+                    <p class="font-bold text-lg text-gray-800 dark:text-white">150</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-300">NFT Tokens</p>
+                </div>
+            </div>
+
+            <div class="flex space-x-3">
+                <button class="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2 rounded-xl text-sm font-semibold">
+                    <i class="fas fa-plus mr-2"></i>Add Funds
+                </button>
+                <button class="flex-1 bg-gradient-to-r from-green-500 to-teal-500 text-white py-2 rounded-xl text-sm font-semibold">
+                    <i class="fas fa-exchange-alt mr-2"></i>Trade
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <nav id="bottom-navigation" class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex items-center justify-around py-2">
+            <button class="nav-item flex flex-col items-center py-2 px-3 text-neon-pink">
+                <i class="fas fa-home text-lg mb-1"></i>
+                <span class="text-xs font-semibold">Home</span>
+            </button>
+            <button class="nav-item flex flex-col items-center py-2 px-3 text-gray-600 dark:text-gray-400">
+                <i class="fas fa-compass text-lg mb-1"></i>
+                <span class="text-xs">Explore</span>
+            </button>
+            <button class="nav-item flex flex-col items-center py-2 px-3 text-gray-600 dark:text-gray-400">
+                <i class="fas fa-tags text-lg mb-1"></i>
+                <span class="text-xs">NFT Deals</span>
+            </button>
+            <button class="nav-item flex flex-col items-center py-2 px-3 text-gray-600 dark:text-gray-400">
+                <i class="fas fa-heart text-lg mb-1"></i>
+                <span class="text-xs">Favorites</span>
+            </button>
+            <button class="nav-item flex flex-col items-center py-2 px-3 text-gray-600 dark:text-gray-400">
+                <i class="fas fa-user text-lg mb-1"></i>
+                <span class="text-xs">Profile</span>
+            </button>
+        </div>
+    </nav>
+
+    <div id="coupon-modal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-sm mx-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-lg text-gray-800 dark:text-white">Coupon Details</h3>
+                <button onclick="closeCouponModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="coupon-content" class="space-y-4">
+                <div class="coupon-image-container">
+                    <img class="w-full h-32 rounded-xl object-cover mb-4" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/2ef746b54c-cea8ea114fd2fd00faa5.png" alt="elegant tea house interior with traditional decor">
+                </div>
+
+                <div class="nft-info bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
+                    <h4 class="font-semibold text-gray-800 dark:text-white mb-2">NFT Information</h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-300">Creator:</span>
+                            <span class="font-medium text-gray-800 dark:text-white">TeaHouse_Official</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-300">Price:</span>
+                            <span class="font-medium text-gray-800 dark:text-white">0.05 ETH</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-300">Rarity:</span>
+                            <span class="rarity-rare text-white px-2 py-1 rounded text-xs">Rare</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="store-info">
+                    <img class="w-full h-24 rounded-xl object-cover mb-2" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/98e25de82b-8e2f2fc848b87bd12bdc.png" alt="morning tea house storefront with traditional chinese architecture">
+                    <div class="text-center">
+                        <h4 class="font-semibold text-gray-800 dark:text-white">Morning Tea House</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Traditional Dim Sum Restaurant</p>
+                        <p class="text-xs text-gray-500">📍 Central District, Hong Kong</p>
+                    </div>
+                </div>
+
+                <button class="w-full bg-gradient-to-r from-hk-red to-hk-yellow text-white font-bold py-3 rounded-xl">
+                    <i class="fas fa-ticket mr-2"></i>Redeem Coupon
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="qr-modal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-sm mx-auto text-center">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-lg text-gray-800 dark:text-white">QR Code</h3>
+                <button onclick="closeQRModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="qr-code-container bg-gray-100 dark:bg-gray-700 rounded-xl p-8 mb-4">
+                <img class="w-32 h-32 mx-auto" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/2ea8162098-e6bda75ef21402ba9489.png" alt="QR code for mobile payment and redemption">
+            </div>
+
+            <h4 class="font-semibold text-gray-800 dark:text-white mb-2">Coffee + Retail Bundle</h4>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Show this QR code at participating stores</p>
+
+            <div class="flex space-x-3">
+                <button class="flex-1 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white py-2 rounded-xl text-sm">
+                    <i class="fas fa-download mr-2"></i>Save
+                </button>
+                <button class="flex-1 bg-gradient-to-r from-hk-red to-hk-yellow text-white py-2 rounded-xl text-sm">
+                    <i class="fas fa-share mr-2"></i>Share
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="lucky-draw-modal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-sm mx-auto text-center">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-lg text-gray-800 dark:text-white">Lucky Draw</h3>
+                <button onclick="closeLuckyDrawModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="spinning-wheel-container mb-6">
+                <div class="relative w-48 h-48 mx-auto">
+                    <img id="wheel-image" class="w-full h-full rounded-full object-cover border-4 border-hk-yellow" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/7ded70ef7c-e31129745df8f2830f0b.png" alt="colorful prize wheel with segments showing different rewards">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2">
+                        <div class="w-0 h-0 border-l-4 border-r-4 border-b-8 border-l-transparent border-r-transparent border-b-hk-red"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="spin-result" class="hidden mb-4">
+                <div class="bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4">
+                    <i class="fas fa-trophy text-yellow-500 text-3xl mb-2"></i>
+                    <h4 class="font-bold text-lg text-gray-800 dark:text-white mb-1">Congratulations!</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">You won a Premium Coffee Coupon!</p>
+                </div>
+            </div>
+
+            <button id="spin-button" class="w-full bg-gradient-to-r from-hk-red to-hk-yellow text-white font-bold py-3 rounded-xl mb-3" onclick="spinWheel()">
+                <i class="fas fa-play mr-2"></i>Spin the Wheel!
+            </button>
+
+            <p class="text-xs text-gray-500">Cost: 5 NFT Tokens</p>
+        </div>
+    </div>
+
+    <div id="language-modal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-sm mx-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-lg text-gray-800 dark:text-white">Select Language</h3>
+                <button onclick="closeLanguageModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <button class="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700" onclick="setLanguage('en')">
+                    <span class="text-2xl">🇺🇸</span>
+                    <span class="font-medium text-gray-800 dark:text-white">English</span>
+                    <i class="fas fa-check text-neon-pink ml-auto"></i>
+                </button>
+                <button class="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700" onclick="setLanguage('zh')">
+                    <span class="text-2xl">🇭🇰</span>
+                    <span class="font-medium text-gray-800 dark:text-white">繁體中文</span>
+                </button>
+                <button class="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700" onclick="setLanguage('zh-cn')">
+                    <span class="text-2xl">🇨🇳</span>
+                    <span class="font-medium text-gray-800 dark:text-white">简体中文</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showCouponDetails(couponId) {
+        document.getElementById('coupon-modal').classList.remove('hidden');
+    }
+
+    function closeCouponModal() {
+        document.getElementById('coupon-modal').classList.add('hidden');
+    }
+
+    function showQRCode(comboId) {
+        document.getElementById('qr-modal').classList.remove('hidden');
+    }
+
+    function closeQRModal() {
+        document.getElementById('qr-modal').classList.add('hidden');
+    }
+
+    function showLuckyDraw() {
+        document.getElementById('lucky-draw-modal').classList.remove('hidden');
+    }
+
+    function closeLuckyDrawModal() {
+        document.getElementById('lucky-draw-modal').classList.add('hidden');
+    }
+
+    function spinWheel() {
+        const wheel = document.getElementById('wheel-image');
+        const spinButton = document.getElementById('spin-button');
+        const result = document.getElementById('spin-result');
+
+        spinButton.disabled = true;
+        spinButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Spinning...';
+
+        wheel.style.transform = 'rotate(' + (Math.random() * 360 + 1080) + 'deg)';
+        wheel.style.transition = 'transform 3s ease-out';
+
+        setTimeout(() => {
+            result.classList.remove('hidden');
+            spinButton.innerHTML = '<i class="fas fa-play mr-2"></i>Spin Again!';
+            spinButton.disabled = false;
+        }, 3000);
+    }
+
+    function closeLanguageModal() {
+        document.getElementById('language-modal').classList.add('hidden');
+    }
+
+    function setLanguage(lang) {
+        console.log('Language set to:', lang);
+        closeLanguageModal();
+    }
+
+    document.getElementById('language-toggle').addEventListener('click', () => {
+        document.getElementById('language-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('dark-mode-toggle').addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+    });
+
+    document.getElementById('wallet-connect').addEventListener('click', () => {
+        const button = document.getElementById('wallet-connect');
+        if (button.innerHTML.includes('Connect')) {
+            button.innerHTML = '<i class="fab fa-ethereum text-sm"></i><span>0x1234...5678</span>';
+            button.classList.add('bg-green-100', 'text-green-600');
+            button.classList.remove('bg-white', 'text-hk-red');
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-backdrop')) {
+            e.target.classList.add('hidden');
+        }
+    });
+</script>
+
+</body></html>
+
+
+
+
